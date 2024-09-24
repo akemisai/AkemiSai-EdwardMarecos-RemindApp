@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.remindapp.ui.theme.RemindAppTheme
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -89,76 +91,75 @@ fun RemindApp() {
         calendar.get(Calendar.MINUTE),
         true
     )
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            TextField(
-                value = message,
-                onValueChange = { message = it },
-                label = { Text("Reminder Message") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Row {
-                Button(onClick = { datePickerDialog.show() }) {
-                    Text(if (date.isEmpty()) "Select Date" else "Date: $date")
-                }
-
-                Button(onClick = { timePickerDialog.show() }) {
-                    Text(if (time.isEmpty()) "Select Time" else "Time: $time")
-                }
-            }
-            Row { ElevatedButton(
-                onClick = {
-                    if (message.text.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()) {
-                        remindMessage = message.text
-                        remindDate = date
-                        remindTime = time
-
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                "Reminder Set: ${remindMessage}, $remindDate at $remindTime"
-                            )
-                        }
-                    }
-                },
-                enabled = message.text.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()
-            ) {
-                Text("Set Reminder")
+        TextField(
+            value = message,
+            onValueChange = { message = it },
+            label = { Text("Reminder Message") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.padding(16.dp))
+        Row {
+            Button(onClick = { datePickerDialog.show() }) {
+                Text(if (date.isEmpty()) "Select Date" else "Date: $date")
             }
 
-                ElevatedButton(onClick = {
-                    message = TextFieldValue("")
-                    date = ""
-                    time = ""
-                    remindMessage = ""
-                    remindDate = ""
-                    remindTime = ""
+            Button(onClick = { timePickerDialog.show() }) {
+                Text(if (time.isEmpty()) "Select Time" else "Time: $time")
+            }
+        }
+
+        Row { ElevatedButton(
+            onClick = {
+                if (message.text.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()) {
+                    remindMessage = message.text
+                    remindDate = date
+                    remindTime = time
+
                     scope.launch {
-                        snackbarHostState.showSnackbar("Reminder Cleared")
+                        snackbarHostState.showSnackbar(
+                            "Reminder Set: ${remindMessage}, $remindDate at $remindTime"
+                        )
                     }
-                }) {
-                    Text("Clear Reminder")
-                } }
-            if (remindMessage.isNotEmpty() && remindDate.isNotEmpty() && remindTime.isNotEmpty()) {
-                ElevatedCard() {
-                    Text(
-                        text = "Reminder: $remindMessage, Date: $remindDate, Time: $remindTime",
-                        modifier = Modifier.padding(16.dp)
-                    )
-
                 }
+            },
+            enabled = message.text.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()
+        ) {
+            Text("Set Reminder")
+        }
+
+            ElevatedButton(onClick = {
+                message = TextFieldValue("")
+                date = ""
+                time = ""
+                remindMessage = ""
+                remindDate = ""
+                remindTime = ""
+                scope.launch {
+                    snackbarHostState.showSnackbar("Reminder Cleared")
+                }
+            }) {
+                Text("Clear Reminder")
+            } }
+        Spacer(modifier = Modifier.padding(32.dp))
+        if (remindMessage.isNotEmpty() && remindDate.isNotEmpty() && remindTime.isNotEmpty()) {
+            ElevatedCard() {
+                Text(
+                    text = "Reminder: $remindMessage \nDate: $remindDate $remindTime",
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(32.dp)
+                )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
