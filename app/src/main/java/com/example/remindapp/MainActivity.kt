@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -94,9 +96,9 @@ fun RemindApp() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(25.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             TextField(
                 value = message,
@@ -146,7 +148,13 @@ fun RemindApp() {
                     Text("Clear Reminder")
                 } }
             if (remindMessage.isNotEmpty() && remindDate.isNotEmpty() && remindTime.isNotEmpty()) {
-                Text(text = "Reminder: $remindMessage, Date: $remindDate, Time: $remindTime")
+                ElevatedCard() {
+                    Text(
+                        text = "Reminder: $remindMessage, Date: $remindDate, Time: $remindTime",
+                        modifier = Modifier.padding(16.dp)
+                    )
+
+                }
             }
         }
     }
